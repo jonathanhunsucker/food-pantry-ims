@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Home | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+{if($user)}
+<div class="row">
+    <div class="col-xs-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pickups</h3>
+            </div>
+            <div class="panel-body"><a href="/pickups/">Go <span class="glyphicon glyphicon-chevron-right"></span></a></div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Bags</h3>
+            </div>
+            <div class="panel-body">
+                <a href="/bags/">Go <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <p class="text-danger">Not yet implemented</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Clients</h3>
+            </div>
+            <div class="panel-body">
+                <a href="/clients/">Go <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <p class="text-danger">Not yet implemented</p>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Service Report</h3>
+            </div>
+            <div class="panel-body">
+                <a href="/service-report/">Go <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <p class="text-danger">Not yet implemented</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Drop Offs</h3>
+            </div>
+            <div class="panel-body">
+                <a href="/drop-offs/">Go <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <p class="text-danger">Not yet implemented</p>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Products</h3>
+            </div>
+            <div class="panel-body">
+                <a href="/products/">Go <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <p class="text-danger">Not yet implemented</p>
+            </div>
+        </div>
+    </div>
+</div>
+{else}
+<div class="jumbotron">
+    <h1>Food Pantry</h1>
+    <p>A demo application for a food pantry management system</p>
+    <p><a class="btn btn-primary btn-lg" onclick="javascript:$('#username').focus()">Log in</a></p>
+</div>
+{endif}
+
+{inclfrag|footer}
+</body>
+</html>

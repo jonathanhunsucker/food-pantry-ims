@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Pickups | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>Pickups</h1>
+
+<form class="form-inline row" role="form">
+    <div class="form-group col-xs-2">
+        <input type="text" class="form-control" id="pickupday" name="pickupday" placeholder="Enter pickup day" value="{$pickupday}" />
+    </div>
+    <button type="submit" class="btn btn-primary">View Pickups</button>
+    <a href="/pickups/" class="btn btn-default">View All</a>
+</form>
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Size</th>
+            <th>Address</th>
+            <th>Telephone</th>
+            <th>Monthly Pickup Day</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach($clients as $client)}<tr>
+            <td>{$client->lname}</td>
+            <td>{$client->fname}</td>
+            <td>{$client->size}</td>
+            <td>{$client->street} {$client->aptno}<br />{$client->city}, {$client->state} {$client->zip}</td>
+            <td>{$client->phone}</td>
+            <td>{$client->pickupday}</td>
+            <td><a href="verify?cid={$client->cid}" type="button" class="btn btn-success btn-sm">Sign In <span class="glyphicon glyphicon-chevron-right"></span></a></td>
+        </tr>{endforeach}
+        {if(!$clients)}<tr>
+            <td colspan="7"><div class="alert alert-info"><b>No clients due to pickup on {$pickupday}</b>. <a href="#" onclick="javascript:$('#pickupday').focus();" class="alert-link">Enter another day</a></div></td>
+        </tr>{endif}
+        {if(!$pickupday && !$clients)}<tr>
+            <td colspan="7"><div class="alert alert-warning"><b>No pickup day entered</b>. <a href="#" onclick="javascript:$('#pickupday').focus();" class="alert-link">Enter a day</a></div></td>
+        </tr>{endif}
+</table>
+
+{inclfrag|footer}
+</body>
+</html>
