@@ -1,6 +1,6 @@
 <?php
 
-define("DEBUG", true);
+define("DEBUG", stripos($_SERVER["HTTP_HOST"], "eta") === false);
 define("DEBUG_VIEW", false);
 define("PROJECT_ROOT", realpath(dirname(__FILE__) . "/.."));
 
@@ -128,7 +128,11 @@ try {
     }
     
 } catch (Exception $e) {
-    dump(get_class($e) . ": " . $e->getMessage());
-    dump($e->getTrace());
+    if (DEBUG) {
+        dump(get_class($e) . ": " . $e->getMessage());
+        dump($e->getTrace());
+    } else {
+        echo "<pre>That's an error</pre>";
+    }
 }
 ?>
