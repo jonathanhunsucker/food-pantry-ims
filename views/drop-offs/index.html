@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Drop Offs | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>Drop Offs</h1>
+
+<form action="drop-off-post" method="post">
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Source</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach($products as $product)}<tr>
+                    <input type="hidden" name="prod_name[]" value="{$product->name}" />
+                    <td>{$product->name}</td>
+                    <td><select class="form-control" name="source_name[]">
+                        {foreach($sources as $source)}<option>{$source->name}</option>{endforeach}
+                    </select></td>
+                    <td>
+                        <input type="text" class="form-control" name="qty[]" placeholder="e.g. {rand(1, 5)}"></input>
+                    </td>
+                </tr>{endforeach}
+        </table>
+        <p>
+            <button type="submit" class="btn btn-primary pull-right">Save <span class="glyphicon glyphicon-chevron-right"></span></button>
+        </p>
+    </div>
+</div>
+</form>
+
+<br />
+{inclfrag|footer}
+</body>
+</html>
