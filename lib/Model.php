@@ -56,7 +56,7 @@ class Model {
             return $this->ident($col);
         }, $columns));
         $values = implode(", ", array_map(function ($col) {
-            return "\"" . $this->$col . "\"";
+            return "\"" . $this->getValue($col) . "\"";
         }, $columns));
         $query = "INSERT INTO `" . $this->_table_name . "` ({$real_columns}) VALUES(" . $values . ")";
         $result = Database::get()->query($query);

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>New Product | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>New Product</h1>
+
+<form class="form-horizontal" role="form" method="post" action="create-post">
+    <div class="form-group">
+        <label for="name" class="col-sm-3 control-label">Name</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="name" name="name" value="{$name}" placeholder="Super duper">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="source" class="col-sm-3 control-label">Source</label>
+        <div class="col-sm-5">
+            <select class="form-control" name="source">
+                {foreach($sources as $source)}<option>{$source->name}</option>{endforeach}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="cost" class="col-sm-3 control-label">Cost Per Unit</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="cost" name="cost" value="{$cost}" placeholder="1.13">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="pull-right">
+            <button type="submit" class="btn btn-success">Create Product</button>
+        </div>
+    </div>
+</form>
+
+
+{inclfrag|footer}
+</body>
+</html>
