@@ -3,23 +3,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/">Food Pantry</a>
         </div>
-
-        <!--ul class="nav navbar-nav">
-            <li class="active"><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
-                </ul>
-            </li>
-        </ul-->
+        
         {if(!$user)}<form class="navbar-form navbar-right" role="form" action="/login-post" method="post">
             <div class="form-group">
                 <label class="sr-only" for="username">Username</label>
@@ -41,7 +25,7 @@
 {if($breadcrumbs)}<ol class="breadcrumb">
     {foreach ($breadcrumbs as $crumb)}<li>{if(!$crumb['active'])}<a {if($crumb['active'])}class="active"{endif} href="{$crumb['href']}">{endif}{$crumb["text"]}{if(!$crumb['active'])}</a>{endif}</li>{endforeach}
 </ol>{endif}
-{foreach(get_flash("success") as $message)}<div class="alert alert-success">{$message}</div>{endforeach}
-{foreach(get_flash("info") as $message)}<div class="alert alert-info">{$message}</div>{endforeach}
-{foreach(get_flash("warning") as $message)}<div class="alert alert-warning">{$message}</div>{endforeach}
-{foreach(get_flash("danger") as $message)}<div class="alert alert-danger">{$message}</div>{endforeach}
+{foreach(get_flash("success") as $message)}<div class="alert alert-success">{h|$message}</div>{endforeach}
+{foreach(get_flash("info") as $message)}<div class="alert alert-info">{h|$message}</div>{endforeach}
+{foreach(get_flash("warning") as $message)}<div class="alert alert-warning">{h|$message}</div>{endforeach}
+{foreach(array_merge(get_flash("danger"), get_flash("error")) as $message)}<div class="alert alert-danger">{h|$message}</div>{endforeach}

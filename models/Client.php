@@ -17,7 +17,12 @@ class Client extends Model {
         $this->hasColumn("Date_Of_Birth as dob");
         $this->hasColumn("Gender as gender");
         $this->hasForeignKeyOnce("Bag_Type as bag_type", array("Bag", "name"), "bag");
-        // maybe add the foreign key relation
+        $this->hasForeignKey("cid", array("FamilyMember", "cid"), "family_members");
+    }
+    
+    public function __get($name) {
+        if ($name == "size") return count($this->family_members) + 1;
+        return parent::__get($name);
     }
     
 }

@@ -11,6 +11,7 @@ class Model {
     protected $_values = array();
     protected $_dirty_values = array();
     protected $_foreigns = array();
+    public $_from_table = false;
     
     function __construct() {
         $this->_table_name = self::getTableName();
@@ -19,15 +20,62 @@ class Model {
     public function setUp() {}
     
     public function save() {
-        $columns = $this->implodeNIdent(array_keys($this->_dirty_values));
-        $values = $this->implodeNIdent(array_values($this->_dirty_values));
-        $query = "INSERT INTO `{$this->_table_name} ({$columns}) VALUES(" . $values . ")";
-        dump("query");
-        dump($query);
+        $values = implode(", ", array_map(array($this, "ident"), array_keys($this->_dirty_values)));
+        $values = implode(", ", array_map(function ($col) {
+            return "\"" . $col .  "\"";
+        }, array_values($this->_dirty_values)));
+        
+        if (!$this->_from_table) {
+            $this->_insert();
+        } else {
+            $this->_save();
+        }
+    }
+    
+    public function _save() {
+        $query = "UPDATE `" . $this->_table_name . "` SET ";//{$columns}) VALUES(" . $values . ")";
+        $updates = array();
+        foreach ($this->_dirty_values as $key => $value) {
+            $updates[] = $this->ident($key) . "=\"{$value}\"";
+        }
+        $updates = implode(", ", $updates);
+        $query .= $updates;
+        $query .= " WHERE ";
+        $conditions = $this->getKeyWhere();
+        $where_conditions = [];
+        foreach ($conditions as $column => $value) {
+            $where_conditions[] = $this->ident($column) . "='" . $value . "'";
+        }
+        $query .= implode(" AND ", $where_conditions);
         $result = Database::get()->query($query);
-        dump("Result");
-        dump($result);
-        $this->_values = array_merge($this->_values, $this->_dirty_values);
+    }
+    
+    public function _insert() {
+        $columns = array_keys($this->getAllColumns());
+        $real_columns = implode(", ", array_map(function ($col) {
+            return $this->ident($col);
+        }, $columns));
+        $values = implode(", ", array_map(function ($col) {
+            return "\"" . $this->$col . "\"";
+        }, $columns));
+        $query = "INSERT INTO `" . $this->_table_name . "` ({$real_columns}) VALUES(" . $values . ")";
+        $result = Database::get()->query($query);
+        
+        for ($i=0 ; $i < count($columns) ; $i++) {
+            $this->{$this->getCommonNameFor($columns[$i])} = $values[$i];
+        }
+    }
+    
+    public function delete() {
+        $query = "DELETE FROM `" . $this->_table_name . "` WHERE ";
+        $conditions = $this->getKeyWhere();
+        $where_conditions = [];
+        foreach ($conditions as $column => $value) {
+            $where_conditions[] = $this->ident($column) . "='" . $value . "'";
+        }
+        $query .= implode(" AND ", $where_conditions);
+        $result = Database::get()->query($query);
+        return $result;
     }
     
     public function findWhere($conditions) {
@@ -51,10 +99,22 @@ class Model {
         return $this->findWhere($conditions)[0];
     }
     
+    public function getKeyWhere() {
+        $keys = $this->getPrimaryKeys();
+        $conditions = array();
+        for ($i=0 ; $i < count($keys) ; $i++) $conditions[$keys[$i]] = $this->{$keys[$i]};
+        return $conditions;
+    }
+    
+    public function getData() {
+        return $this->_dirty_values;
+    }
+    
     public function yield($fields) {
         $class = get_class($this);
         $model = new $class();
         foreach ($fields as $name => $value) $model->{$this->getCommonNameFor($name)} = $value;
+        $model->_from_table = true;
         return $model;
     }
     
@@ -92,6 +152,13 @@ class Model {
     
     public function getPrimaryKeys() {
         return self::$_table_key_defs[$this->_table_name]["primary_key"];
+    }
+    
+    public function getAllColumns() {
+        $columns = $this->getColumns();
+        $keys = $this->getPrimaryKeys();
+        if (count($keys) > 0) $columns = array_merge(array_flip($keys), $columns);
+        return $columns;
     }
     
     /**
@@ -159,7 +226,7 @@ class Model {
     
     /**
      * DropOffTransaction becomes Drop_Off_Transaction
-     * This is used to mitigate having to nest a Transaction model in drop/off
+     * This is used to mitigate having to nest a Transaction model in a directory drop/off/
      * which would have been the result of Framework's autoloading function.
      */
     public static function getTableName() {

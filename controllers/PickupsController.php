@@ -35,6 +35,7 @@ class PickupsController extends Controller {
     public function completeAction() {
         $cid = $_REQUEST["cid"];
         $client = (new Client)->find($cid);
+        
         // TODO update inventory accordingly
         // set actual pickup date
         

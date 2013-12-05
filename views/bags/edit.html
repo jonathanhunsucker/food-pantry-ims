@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>View/Edit Bag | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>View/Edit Bag</h1>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <h3>{$bag->name}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach($bag->holds as $hold)}<tr><form action="edit-item-post" method="post">
+                    <input type="hidden" name="bag_name" value="{$bag->name}" />
+                    <input type="hidden" name="prod_name" value="{$hold->prod_name}" />
+                    <td>{$hold->prod_name}</td>
+                    <td class="row"><div class="col-xs-6"><input type="text" class="form-control" name="qty" value="{$hold->curr_qty}" /></div></td>
+                    <td><button type="submit" class="btn btn-primary btn-sm">Save <span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                </form></tr>{endforeach}
+                {if(!$bag->holds)}<tr>
+                    <td colspan="3"><div class="alert alert-info">No products in bag</div></td>
+                </tr>{endif}
+                <tr>
+                    <form class="form-inline" action="add-item-post" method="post">
+                    <input type="hidden" name="bag_name" value="{$bag->name}" />
+                    <td><select name="prod_name" class="form-control">{foreach($products as $product)}<option>{$product->name}</option>{endforeach}</select></td>
+                    <td class="row"><div class="col-xs-10"><input type="text" name="qty" placeholder="Enter a quantity" class="form-control" /></div></td>
+                    <td><button type="submit" class="btn btn-success">Add <span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                    </form>
+                </tr>
+        </table>
+    </div>
+</div>
+
+{inclfrag|footer}
+</body>
+</html>

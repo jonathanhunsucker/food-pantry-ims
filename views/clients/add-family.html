@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Add Family | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>Add Family</h1>
+
+<h4>To client <b>{$client->fname} {$client->lname}</b></h4>
+
+<form class="form-horizontal" role="form" method="post" action="add-family-post">
+    <div class="form-group">
+        <label for="fname" class="col-sm-3 control-label">First Name</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="fname" name="fname" value="{$fname}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="lname" class="col-sm-3 control-label">Last Name</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="lname" name="lname" value="{$lname}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="gender" class="col-sm-3 control-label">Gender</label>
+        <div class="col-sm-5">
+            <select class="form-control" name="gender">
+                <option>M</option>
+                <option>F</option>
+                <option>N</option>
+            </select>
+            {$gender}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="dob" class="col-sm-3 control-label">Date of Birth</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" id="dob" name="dob" value="{$dob}" placeholder="{date('Y-m-d')}">
+        </div>
+    </div>
+    <input type="hidden" class="form-control" id="cid" name="cid" value="{$cid}">
+    <div class="form-group">
+        <div class="pull-right">
+            <button type="submit" class="btn btn-success">Add Family Member</button>
+        </div>
+    </div>
+    
+    <a href="/clients/">Go back to clients listing</a>
+</form>
+
+{inclfrag|footer}
+</body>
+</html>

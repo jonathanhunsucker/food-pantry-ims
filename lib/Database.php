@@ -31,6 +31,7 @@ class Database {
     public function query($sql) {
         $args = is_array($sql) ? $sql : func_get_args();
         $query = call_user_func_array(array($this, "_formulate_query"), $args);
+        flash_end($query);
         $result = mysql_query($query);
         if (!$result) throw new Exception("Invalid query: " . mysql_error());
         return $result;

@@ -78,6 +78,10 @@ function flash($message, $type="info") {
     $_SESSION["flash"][$type][] = $message;
 }
 
+function flash_error($message) {
+    return flash($message, "error");
+}
+
 function flash_warning($message) {
     return flash($message, "warning");
 }
@@ -88,6 +92,10 @@ function flash_info($message) {
 
 function flash_success($message) {
     return flash($message, "success");
+}
+
+function flash_end($message) {
+    return flash($message, "end");
 }
 
 function has_flash($type="info") {

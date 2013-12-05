@@ -7,7 +7,7 @@ class Product extends Model {
         $this->hasColumn("Cost as cost");
         $this->hasColumn("Source_Name as source_name");
         
-        $this->hasOne("Source by source_name as source");
+        $this->hasForeignKey("source_name", array("Source", "name"), "source");
     }
     
 }

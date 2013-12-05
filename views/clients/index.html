@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Clients | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>Clients <a href="./create" class="btn btn-success pull-right">New Client</a></h1>
+
+<p>
+    <form class="form-inline">
+        <div class="form-group">
+            <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter last name" value="{$lname}" />
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" value="{$phone}" />
+        </div>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+        <a href="./" class="btn btn-default pull-right">View All</a>
+    </form>
+</p>
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Size</th>
+            <th>Address</th>
+            <th>Telephone</th>
+            <th>Start Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach($clients as $client)}<tr>
+            <td>{$client->lname}</td>
+            <td>{$client->fname}</td>
+            <td>{$client->size}</td>
+            <td>{$client->street} {$client->aptno}<br />{$client->city}, {$client->state} {$client->zip}</td>
+            <td>{$client->phone}</td>
+            <td>{$client->start}</td>
+        </tr>{endforeach}
+        {if(!$clients)}<tr>
+            <td colspan="6"><div class="alert alert-info"><b>No clients from such search</b>. <a href="#" onclick="javascript:$('#lname').focus();" class="alert-link">Enter another value</a></div></td>
+        </tr>{endif}
+</table>
+
+{inclfrag|footer}
+</body>
+</html>
