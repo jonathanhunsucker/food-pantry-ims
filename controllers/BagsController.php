@@ -2,7 +2,7 @@
 
 class BagsController extends Controller {
     
-    protected $bypass_date_requirement = false;
+    protected $bypass_date_requirement = true;
     
     public function editsNotAllowedMessage() {
         return "<b>Notice</b>: Cannot make changes until " . date('M t \a\f\t\e\r 5\P\M');

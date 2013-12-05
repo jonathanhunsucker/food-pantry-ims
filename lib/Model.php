@@ -44,7 +44,7 @@ class Model {
         $conditions = $this->getKeyWhere();
         $where_conditions = [];
         foreach ($conditions as $column => $value) {
-            $where_conditions[] = $this->ident($column) . "='" . $value . "'";
+            $where_conditions[] = $this->ident($column) . "=\"" . $value . "\"";
         }
         $query .= implode(" AND ", $where_conditions);
         $result = Database::get()->query($query);
@@ -58,6 +58,7 @@ class Model {
         $values = implode(", ", array_map(function ($col) {
             return "\"" . $this->getValue($col) . "\"";
         }, $columns));
+        
         $query = "INSERT INTO `" . $this->_table_name . "` ({$real_columns}) VALUES(" . $values . ")";
         $result = Database::get()->query($query);
         
@@ -71,7 +72,7 @@ class Model {
         $conditions = $this->getKeyWhere();
         $where_conditions = [];
         foreach ($conditions as $column => $value) {
-            $where_conditions[] = $this->ident($column) . "='" . $value . "'";
+            $where_conditions[] = $this->ident($column) . "=\"" . $value . "\"";
         }
         $query .= implode(" AND ", $where_conditions);
         $result = Database::get()->query($query);
@@ -82,7 +83,7 @@ class Model {
         $query = "SELECT * FROM `" . $this->_table_name . "` WHERE ";
         $where_conditions = array();
         foreach ($conditions as $column => $value) {
-            $where_conditions[] = $this->ident($column) . "='" . $value . "'";
+            $where_conditions[] = $this->ident($column) . "=\"" . $value . "\"";
         }
         $query .= implode(" AND ", $where_conditions);
         $results = Database::get()->fetch($query);
