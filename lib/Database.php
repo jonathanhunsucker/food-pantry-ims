@@ -40,6 +40,7 @@ class Database {
     public function _formulate_query($sql/*, $arg0, $arg1...*/) {
         $args = func_get_args();
         $sql = array_shift($args);
+        if (count($args) == 0) return $sql;
         $args = array_map("mysql_real_escape_string", $args);
         array_unshift($args, $sql);
         return rtrim(call_user_func_array("sprintf", $args), ";") . ";";

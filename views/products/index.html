@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Products | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>Products</h1>
+
+<p>
+    <form class="form-inline">
+        <div class="form-group">
+            <input type="text" class="form-control" id="prod_name" name="prod_name" placeholder="Enter product name" value="{$prod_name}" />
+        </div>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+        <a href="./" class="btn btn-default pull-right">View All</a>
+    </form>
+</p>
+
+<br />
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Cost Per Unit</th>
+                </tr>
+            </thead>
+                {foreach($products as $product)}<tr>
+                    <td>{$product->name}</td>
+                    <td>{$product->qty}</td>
+                    <td>{$product->cost}</td>
+                </tr>{endforeach}
+                {if(!$products)}<tr>
+                    <td colspan="6"><div class="alert alert-info"><b>No products from such search</b>. <a href="#" onclick="javascript:$('#prod_name').focus();" class="alert-link">Enter another value</a></div></td>
+                </tr>{endif}
+        </table>
+    </div>
+</div>
+
+{inclfrag|footer}
+</body>
+</html>

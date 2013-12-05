@@ -99,6 +99,13 @@ class Model {
         return $this->findWhere($conditions)[0];
     }
     
+    public function whereLike($column, $value) {
+        $query = "SELECT * FROM `" . $this->_table_name . "` WHERE ";
+        $query .= $this->ident($column) . " LIKE \"%$value%\"";
+        $results = Database::get()->fetch($query);
+        return $this->yieldAll($results);
+    }
+    
     public function getKeyWhere() {
         $keys = $this->getPrimaryKeys();
         $conditions = array();
@@ -222,6 +229,14 @@ class Model {
     
     public function __set($name, $value) {
         $this->_dirty_values[$name] = $value;
+    }
+    
+    /**
+     * Used by functions that need direct access to the column data without
+     * going through __get()
+     */
+    public function getValue($name) {
+        return $this->_dirty_values[$name];
     }
     
     /**
