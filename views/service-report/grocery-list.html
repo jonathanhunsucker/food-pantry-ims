@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Grocery List Report | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>Grocery List Report</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Last Month Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach($data as $datum)}<tr>
+            <td>{$datum["Product_Name"]}</td>
+            <td>{$datum["quantity"]}</td>
+            <td>{$datum["last_month_quantity"]}</td>
+        </tr>{endforeach}
+</table>
+
+{inclfrag|footer}
+</body>
+</html>

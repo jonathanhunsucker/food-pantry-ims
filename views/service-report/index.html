@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {inclfrag|head}
+    <title>Service Report | {$config->title}</title>
+</head>
+<body>
+{inclfrag|header}
+
+<h1>Service Report</h1>
+<p><a href="./">View this month</a> <a href="./view=prev">View previous month</a</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Week</th>
+            <th># Households</th>
+            <th>Under 18 years</th>
+            <th>18-64 years</th>
+            <th>65 years & Older</th>
+            <th>Total People</th>
+            <th>Food Cost ($)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach($data as $week => $datum)}<tr>
+            <td>{$week}</td>
+            <td>{$datum["nHouseholds"]}</td>
+            <td>{$datum["under18"]}</td>
+            <td>{$datum["midage"]}</td>
+            <td>{$datum["over65"]}</td>
+            <td>{$datum["under18"] + $datum["midage"] + $datum["over65"]}</td>
+            <td>{$datum["foodCost"]}</td>
+        </tr>{endforeach}
+</table>
+
+{inclfrag|footer}
+</body>
+</html>
