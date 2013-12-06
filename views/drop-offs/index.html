@@ -24,12 +24,9 @@
                 {foreach($products as $product)}<tr>
                     <input type="hidden" name="prod_name[]" value="{$product->name}" />
                     <td>{$product->name}</td>
-                    <td><select class="form-control" name="source_name[]">
-                        {foreach($sources as $source)}<option>{$source->name}</option>{endforeach}
-                    </select></td>
-                    <td>
-                        <input type="text" class="form-control" name="qty[]" placeholder="e.g. {rand(1, 5)}"></input>
-                    </td>
+                    <input type="hidden" name="source_name[]" value="{$product->source_name}" />
+                    <td>{$product->source_name}</td>
+                    <td><input type="text" class="form-control" name="qty[]" placeholder="e.g. {rand(1, 5)}"></input></td>
                 </tr>{endforeach}
         </table>
         <p>

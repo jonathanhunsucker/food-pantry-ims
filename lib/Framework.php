@@ -1,6 +1,6 @@
 <?php
 
-define("DEBUG", stripos($_SERVER["HTTP_HOST"], "eta") === false);
+define("DEBUG", stripos($_SERVER["HTTP_HOST"], "eta") === false || true);
 define("DEBUG_VIEW", false);
 define("PROJECT_ROOT", realpath(dirname(__FILE__) . "/.."));
 

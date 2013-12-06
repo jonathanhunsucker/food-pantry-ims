@@ -4,49 +4,46 @@ class ServiceReportController extends Controller {
     
     public function indexAction() {
         $month = $_REQUEST["view"] == "prev" ? "Last" : "Current";
-        $data = Database::get()->fetch("SELECT 
-            (SELECT 
-                FLOOR(pickupday/7)+1
-            ) as week,
-            (SELECT count(Client.Client_ID) 
-                FROM Client 
-                WHERE
-                FLOOR(pickupday/7)+1=week
-            ) as nHouseholds, 
-            (SELECT count(*)
-                FROM Client LEFT JOIN Family_Member ON Client.Client_ID=Family_Member.Client_ID
-                WHERE
-                DATEDIFF(CURDATE(), Family_Member.Date_Of_Birth) < 365*18 AND 
-                FLOOR(pickupday/7)+1=week
-            ) as under18, 
-            (SELECT count(*)
-                FROM Client LEFT JOIN Family_Member ON Client.Client_ID=Family_Member.Client_ID
-                WHERE
-                DATEDIFF(CURDATE(), Family_Member.Date_Of_Birth) > 365*18 AND
-                DATEDIFF(CURDATE(), Family_Member.Date_Of_Birth) < 365*64 AND 
-                FLOOR(pickupday/7)+1=week
-            ) as midage, 
-            (SELECT count(*)
-                FROM Client LEFT JOIN Family_Member ON Client.Client_ID=Family_Member.Client_ID
-                WHERE
-                DATEDIFF(CURDATE(), Family_Member.Date_Of_Birth) > 365*65 AND 
-                FLOOR(pickupday/7)+1=week
-            ) as over65, 
-            (SELECT sum(Product.cost * Holds." . $month . "_Mnth_Qty)
-                FROM Client 
-                LEFT JOIN Holds ON Holds.Bag_Name=Client.Bag_Type
-                LEFT JOIN Product ON Product.Product_Name=Holds.Product_Name
-                WHERE FLOOR(pickupday/7)+1=week
-            ) as foodCost
-        FROM Client;");
         
-        $temp_data = array();
-        foreach ($data as $value) {
-            $week = $value["week"];
-            unset($value["week"]);
-            $temp_data[$week] = $value;
+        $data = array();
+        
+        $weeks = array(
+            array(1, 7),
+            array(8, 14),
+            array(15, 21),
+            array(28, 100),
+        );
+        
+        $ranges = array(
+            "under18" => function ($table) {
+                return "$table.Date_Of_Birth > DATE_SUB(NOW(), INTERVAL 18 YEAR)";
+            },
+            "midage" => function ($table) {
+                return "$table.Date_Of_Birth > DATE_SUB(NOW(), INTERVAL 65 YEAR) AND $table.Date_Of_Birth < DATE_SUB(NOW(), INTERVAL 18 YEAR)";
+            },
+            "over65" => function ($table) {
+                return "$table.Date_Of_Birth < DATE_SUB(NOW(), INTERVAL 65 YEAR)";
+            }
+        );
+        
+        $tables = array(
+            "Client" => "",
+            "Family_Member" => "LEFT JOIN Client ON Client.Client_ID=Family_Member.Client_ID"
+        );
+        
+        for ($i=1 ; $i <= count($weeks) ; $i++) {
+            list($start_day, $end_day) = $weeks[$i-1];
+            $data[$i] = array();
+            foreach ($ranges as $name => $condition) {
+                $count = 0;
+                foreach ($tables as $table => $join) {
+                    $count += Database::get()->fetch("SELECT count(*) as n FROM $table $join WHERE PickUpDay BETWEEN $start_day AND $end_day AND " . $condition($table))[0]["n"];
+                }
+                $data[$i][$name] = $count;
+            }
+            $data[$i]["nHouseholds"] = Database::get()->fetch("SELECT count(*) as n FROM Client WHERE PickUpDay BETWEEN $start_day AND $end_day")[0]["n"];
+            $data[$i]["foodCost"] = Database::get()->fetch("select sum(Holds.Current_Mnth_Qty * Product.Cost) as n from Client left join Holds on Client.Bag_Type = Holds.Bag_Name left join Product on Holds.Product_Name = Product.Product_Name where Client.PickUpDay BETWEEN $start_day AND $end_day")[0]["n"];
         }
-        $data = $temp_data;
         
         return array(
             "data" => $data
