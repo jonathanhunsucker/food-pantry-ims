@@ -11,7 +11,7 @@ class ServiceReportController extends Controller {
             array(1, 7),
             array(8, 14),
             array(15, 21),
-            array(28, 100),
+            array(22, 100),
         );
         
         $ranges = array(
@@ -42,7 +42,7 @@ class ServiceReportController extends Controller {
                 $data[$i][$name] = $count;
             }
             $data[$i]["nHouseholds"] = Database::get()->fetch("SELECT count(*) as n FROM Client WHERE PickUpDay BETWEEN $start_day AND $end_day")[0]["n"];
-            $data[$i]["foodCost"] = Database::get()->fetch("select sum(Holds.Current_Mnth_Qty * Product.Cost) as n from Client left join Holds on Client.Bag_Type = Holds.Bag_Name left join Product on Holds.Product_Name = Product.Product_Name where Client.PickUpDay BETWEEN $start_day AND $end_day")[0]["n"];
+            $data[$i]["foodCost"] = Database::get()->fetch("select sum(Holds." . $month . "_Mnth_Qty * Product.Cost) as n from Client left join Holds on Client.Bag_Type = Holds.Bag_Name left join Product on Holds.Product_Name = Product.Product_Name where Client.PickUpDay BETWEEN $start_day AND $end_day")[0]["n"];
         }
         
         return array(

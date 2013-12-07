@@ -90,6 +90,7 @@ class ClientsController extends Controller {
         $member->cid = $client->cid;
         $member->fname = $_REQUEST["fname"];
         $member->lname = $_REQUEST["lname"];
+        $member->dob = $_REQUEST["dob"];
         
         try {
             $member->save();
